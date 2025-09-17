@@ -1,5 +1,5 @@
 const API_URL = '/api';
-const BASE = "/api";
+
 fetch(`${API_URL}/articles?limit=5&offset=0`)
 
 export function getToken() {
