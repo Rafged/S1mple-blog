@@ -1,19 +1,12 @@
-// API helper — use relative '/api' in dev (vite proxy) but full absolute URL in production (Vercel)
-const DEV_BASE = '/api';
-const PROD_BASE = 'https://realworld.habsida.net/api';
-
-const isDev = typeof window !== 'undefined' && window.location.hostname === 'localhost';
-
-const BASE = isDev ? DEV_BASE : PROD_BASE;
+// API helper (uses relative '/api' so vite proxy can forward requests to real API)
+const BASE = '/api';
 
 export function getToken() {
-  try { return localStorage.getItem('token'); } catch (e) { return null; }
+  return localStorage.getItem('token');
 }
 export function setToken(token) {
-  try {
-    if (token) localStorage.setItem('token', token);
-    else localStorage.removeItem('token');
-  } catch (e) {}
+  if (token) localStorage.setItem('token', token);
+  else localStorage.removeItem('token');
 }
 
 async function request(path, method='GET', body) {
@@ -21,21 +14,29 @@ async function request(path, method='GET', body) {
   const token = getToken();
   if (token) headers['Authorization'] = 'Token ' + token;
 
-  const opts = { method, headers };
-  if (body) opts.body = JSON.stringify(body);
+  const res = await fetch(BASE + path, {
+    method,
+    headers,
+    body: body ? JSON.stringify(body) : undefined,
+  });
 
-  const res = await fetch(BASE + path, opts);
   const text = await res.text();
   let data = null;
-  try { data = text ? JSON.parse(text) : null; } catch(e) { data = text; }
-
+  try { data = text ? JSON.parse(text) : null } catch(e) { data = text }
   if (!res.ok) {
-    const err = new Error(data && data.errors ? JSON.stringify(data.errors) : res.statusText);
-    err.status = res.status;
-    err.data = data;
+    const err = new Error('API Error: ' + res.status);
+    err.response = data;
     throw err;
   }
   return data;
+}
+
+// Auth
+export const AuthAPI = {
+  login: (credentials) => request('/users/login', 'POST', { user: credentials }),
+  register: (user) => request('/users', 'POST', { user }),
+  current: () => request('/user'),
+  update: (user) => request('/user', 'PUT', { user }),
 }
 
 // Articles
