@@ -1,4 +1,4 @@
-const API_URL = "https://api.realworld.io/api";
+// API helper (uses relative '/api' so vite proxy can forward requests to real API)
 const BASE = '/api';
 
 export function getToken() {
