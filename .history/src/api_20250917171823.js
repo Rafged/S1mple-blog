@@ -1,12 +1,4 @@
-const BASE = "/api"; // работает через vercel.json
 
-async function getArticles(limit = 5, offset = 0) {
-  const res = await fetch(`${BASE}/articles?limit=${limit}&offset=${offset}`);
-  if (!res.ok) {
-    throw new Error("API Error: " + res.status);
-  }
-  return res.json();
-}
 
 export function getToken() {
   return localStorage.getItem('token');
