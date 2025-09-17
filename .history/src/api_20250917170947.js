@@ -1,5 +1,5 @@
+
 const API_URL = '/api';
-fetch(`${API_URL}/articles?limit=5&offset=0`)
 
 export function getToken() {
   return localStorage.getItem('token');
