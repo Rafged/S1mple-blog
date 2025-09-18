@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { ArticlesAPI } from '../api'
+import { ArticlesAPI, TagsAPI } from '../api'
 import ArticleCard from '../components/ArticleCard'
 import Pagination from '../components/Pagination'
 
@@ -7,6 +7,7 @@ export default function Home(){
   const [articles, setArticles] = useState([])
   const [page, setPage] = useState(0)
   const [loading, setLoading] = useState(false)
+  const [tags, setTags] = useState([])
 
   useEffect(()=>{
     setLoading(true)

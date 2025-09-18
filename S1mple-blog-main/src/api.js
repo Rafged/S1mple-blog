@@ -53,3 +53,9 @@ export const ArticlesAPI = {
 export const ProfileAPI = {
   get: (username) => request(`/profiles/${username}`)
 }
+
+
+// Tags
+export const TagsAPI = {
+  list: () => request('/tags')
+}
