@@ -13,14 +13,16 @@ export default function Article(){
     try{ const res = await getArticle(slug); setArticle(res.article) }catch(e){ console.error(e) }
   }
 
+  
   async function toggleFav(){
-    if(!localStorage.getItem('token')){ alert('Войдите чтобы поставить Favorite'); return; }
+    if(!localStorage.getItem('token')){ alert('Войдите чтобы оценивать'); return; }
     try{
       if(article.favorited) await unfavoriteArticle(article.slug)
       else await favoriteArticle(article.slug)
-      load()
+      await load()
     }catch(e){ console.error(e); alert('Ошибка') }
   }
+
 
   if(!article) return <div>Loading...</div>
 

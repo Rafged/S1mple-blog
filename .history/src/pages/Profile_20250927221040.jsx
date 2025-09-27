@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import Pagination from "../components/Pagination";
-import "./Profile.css"; 
 
 const Profile = () => {
   const params = useParams();
@@ -69,23 +68,30 @@ const Profile = () => {
   if (!profile) return <p style={{ textAlign: "center" }}>Loading...</p>;
 
   return (
+    <div className="profile-header">
+  <img
+    className="profile-avatar"
+    src={user.image || "https://static.productionready.io/images/smiley-cyrus.jpg"}
+    alt={user.username}
+  />
+  <h2 className="profile-username">{user.username}</h2>
+  <div className="profile-meta">
+    <span className="heart">❤️</span>
+    <span className="text">Text</span>
+  </div>
+</div>
     <div className="container" style={{ maxWidth: 800 }}>
-      {/* Чёрный фон с аватаркой и именем */}
-      <div className="profile-header">
+      <div style={{ textAlign: "center", padding: "20px" }}>
         <img
           src={profile.image || "https://api.realworld.io/images/smiley-cyrus.jpeg"}
           alt="avatar"
-          className="profile-avatar"
+          style={{ width: "100px", height: "100px", borderRadius: "50%" }}
         />
-        <h2 className="profile-username">{profile.username}</h2>
-        <div className="profile-subinfo">
-          <span className="heart">❤️</span>
-          <span className="profile-text">Text</span>
-        </div>
+        <h2 style={{ marginTop: 12 }}>{profile.username}</h2>
+        <p className="meta">{profile.bio}</p>
       </div>
 
-      {/* Кнопки переключения */}
-      <div style={{ display: "flex", justifyContent: "center", margin: "20px 0" }}>
+      <div style={{ display: "flex", justifyContent: "center", marginBottom: "20px" }}>
         <button
           onClick={() => { setActiveTab("my"); setCurrentPage(1); }}
           style={{ marginRight: "10px", padding: "8px 15px", background: activeTab==="my" ? "#55b36b" : "#eee", border: "none", borderRadius: 6 }}
@@ -100,15 +106,14 @@ const Profile = () => {
         </button>
       </div>
 
-      {/* Статьи */}
       <div>
         {articles.length === 0 ? (
           <p style={{ textAlign: "center" }}>No articles yet...</p>
         ) : (
           articles.map((article) => (
-            <div key={article.slug} className="article-card">
-              <h3>{article.title}</h3>
-              <p>{article.description}</p>
+            <div key={article.slug} style={{ borderBottom: "1px solid #ddd", padding: "10px" }}>
+              <h3 style={{ margin: "6px 0" }}>{article.title}</h3>
+              <p style={{ margin: "6px 0", color: "#555" }}>{article.description}</p>
             </div>
           ))
         )}

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import Pagination from "../components/Pagination";
-import "./Profile.css"; 
+import "./Profile.css"; // Подключаем стили (создай Profile.css рядом)
 
 const Profile = () => {
   const params = useParams();

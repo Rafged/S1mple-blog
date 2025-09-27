@@ -44,7 +44,7 @@ export default function Home(){
 
       {/* Popular tags at center top */}
       <div style={{display:'flex', justifyContent:'center', marginBottom:20}}>
-        <div style={{maxWidth:1200, width:'100%'}}>
+        <div style={{maxWidth:900, width:'100%'}}>
           <PopularTags />
         </div>
       </div>

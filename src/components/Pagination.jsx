@@ -1,20 +1,33 @@
+
 import React from "react";
 
-const Pagination = ({ articlesCount, limit, currentPage, onPageChange }) => {
-  const pages = Math.ceil(articlesCount / limit);
+const Pagination = ({ currentPage, totalPages, onPageChange }) => {
+  if (totalPages <= 1) return null;
+
+  const pages = [];
+  for (let i = 1; i <= totalPages; i++) {
+    pages.push(i);
+  }
 
   return (
-    <ul className="pagination">
-      {Array.from({ length: pages }, (_, i) => (
-        <li
-          key={i}
-          className={`page-item ${currentPage === i + 1 ? "active" : ""}`}
-          onClick={() => onPageChange(i + 1)}
+    <div className="pagination" style={{ marginTop: "20px", textAlign: "center" }}>
+      {pages.map((page) => (
+        <button
+          key={page}
+          onClick={() => onPageChange(page)}
+          style={{
+            margin: "0 5px",
+            padding: "5px 10px",
+            backgroundColor: page === currentPage ? "#5cb85c" : "#fff",
+            border: "1px solid #ddd",
+            borderRadius: "4px",
+            cursor: "pointer"
+          }}
         >
-          <span className="page-link">{i + 1}</span>
-        </li>
+          {page}
+        </button>
       ))}
-    </ul>
+    </div>
   );
 };
 
