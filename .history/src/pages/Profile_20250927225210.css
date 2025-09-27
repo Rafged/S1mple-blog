@@ -22,27 +22,26 @@
 }
 
 .profile-subinfo {
-  border-radius: 2px;
-  border: 1px solid #4CAF50;
-  width: 120px;
-  height: 40px;
+    width: 200px;
+  height: 200px;          /* делает квадрат */
   display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-top: 8px;
-  margin-left: 46%;
+  justify-content: center; /* горизонтально центрируем */
+  align-items: center;     /* вертикально центрируем */
+  text-align: center;      /* для многострочного текста */
+  border: 2px solid #333;
+  border-radius: 8px;      /* опционально */
+  padding: 10px;           /* чтобы текст не прилипал к краю */
+  box-sizing: border-box;
 }
 
 .profile-subinfo .heart {
   color: #ff4d4f;
-  font-size: 15px;
-  margin-right: 30px;
+  font-size: 20px;
 }
 
 .profile-subinfo .profile-text {
   font-size: 16px;
-  margin-right: 23px;
-  color: green;
+  color: #ccc;
 }
 
 .article-carde {

@@ -73,8 +73,8 @@ const Profile = () => {
       {/* Чёрный фон с аватаркой и именем */}
       <div className="profile-header">
         <img
-          src={profile.image || "https://static.productionready.io/images/smiley-cyrus.jpg"}
-          alt=""
+          src={profile.image || "https://api.realworld.io/images/smiley-cyrus.jpeg"}
+          alt="dsd"
           className="profile-avatar"
         />
         <h2 className="profile-username">{profile.username}</h2>

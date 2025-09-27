@@ -22,27 +22,25 @@
 }
 
 .profile-subinfo {
-  border-radius: 2px;
-  border: 1px solid #4CAF50;
-  width: 120px;
-  height: 40px;
+  width: 60px;             /* займёт 40% ширины вьюпорта */
+  max-width: 100px;        /* ограничение по ширине */
+  aspect-ratio: 1 / 1;     /* обязательно — поддерживается в современных браузерах */
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-top: 8px;
-  margin-left: 46%;
+  border: 1px solid #999;
+  padding: 12px;
+  box-sizing: border-box;
 }
 
 .profile-subinfo .heart {
   color: #ff4d4f;
-  font-size: 15px;
-  margin-right: 30px;
+  font-size: 20px;
 }
 
 .profile-subinfo .profile-text {
   font-size: 16px;
-  margin-right: 23px;
-  color: green;
+  color: #ccc;
 }
 
 .article-carde {

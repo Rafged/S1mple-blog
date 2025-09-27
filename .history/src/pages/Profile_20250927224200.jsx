@@ -73,8 +73,8 @@ const Profile = () => {
       {/* Чёрный фон с аватаркой и именем */}
       <div className="profile-header">
         <img
-          src={profile.image || "https://static.productionready.io/images/smiley-cyrus.jpg"}
-          alt=""
+          src={profile.image || "https://api.realworld.io/images/smiley-cyrus.jpeg"}
+          alt="avatar"
           className="profile-avatar"
         />
         <h2 className="profile-username">{profile.username}</h2>
@@ -106,7 +106,7 @@ const Profile = () => {
           <p style={{ textAlign: "center" }}>No articles yet...</p>
         ) : (
           articles.map((article) => (
-            <div key={article.slug} className="article-carde">
+            <div key={article.slug} className="article-cardу">
               <h3>{article.title}</h3>
               <p>{article.description}</p>
             </div>

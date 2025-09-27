@@ -10,7 +10,7 @@
 .profile-avatar {
   width: 120px;
   height: 120px;
-  border-radius: 90%;
+  border-radius: 80%;
   border: 1px solid white;
   margin-bottom: 15px;
 }
@@ -18,42 +18,34 @@
 .profile-username {
   font-size: 24px;
   font-weight: bold;
-  margin: 5;
+  margin: 0;
 }
 
 .profile-subinfo {
-  border-radius: 2px;
-  border: 1px solid #4CAF50;
-  width: 120px;
-  height: 40px;
   display: flex;
   justify-content: center;
   align-items: center;
+  gap: 8px;
   margin-top: 8px;
-  margin-left: 46%;
 }
 
 .profile-subinfo .heart {
   color: #ff4d4f;
-  font-size: 15px;
-  margin-right: 30px;
+  font-size: 20px;
 }
 
 .profile-subinfo .profile-text {
   font-size: 16px;
-  margin-right: 23px;
-  color: green;
+  color: #ccc;
 }
 
-.article-carde {
- border:1px solid #e0e0e0;
-  border-radius:6px;
-  padding:16px;
-  background:#fff;
-  margin-bottom:18px;
-  margin-left: 2%;
-  width: 96%;
-  box-shadow: 0 1px 0 rgba(0,0,0,0.02);
+/* Квадратные рамки постов */
+.article-card {
+  border: 2px solid #e0e0e0;
+  border-radius: 0px;
+  padding: 20px;
+  margin-bottom: 20px;
+  background: #fff;
 }
 
 .heart-text {

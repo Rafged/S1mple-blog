@@ -30,7 +30,6 @@
   justify-content: center;
   align-items: center;
   margin-top: 8px;
-  margin-left: 46%;
 }
 
 .profile-subinfo .heart {
@@ -41,8 +40,7 @@
 
 .profile-subinfo .profile-text {
   font-size: 16px;
-  margin-right: 23px;
-  color: green;
+  color: #ccc;
 }
 
 .article-carde {

@@ -73,7 +73,7 @@ const Profile = () => {
       {/* Чёрный фон с аватаркой и именем */}
       <div className="profile-header">
         <img
-          src={profile.image || "https://static.productionready.io/images/smiley-cyrus.jpg"}
+          src={profile.image || ""}
           alt=""
           className="profile-avatar"
         />

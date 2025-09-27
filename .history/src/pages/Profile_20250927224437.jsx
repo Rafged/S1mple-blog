@@ -73,9 +73,9 @@ const Profile = () => {
       {/* Чёрный фон с аватаркой и именем */}
       <div className="profile-header">
         <img
-          src={profile.image || "https://static.productionready.io/images/smiley-cyrus.jpg"}
-          alt=""
-          className="profile-avatar"
+          src={profile.image || "https://api.realworld.io/images/smiley-cyrus.jpeg"}
+          alt="avatar"
+          className="profile-avatare"
         />
         <h2 className="profile-username">{profile.username}</h2>
         <div className="profile-subinfo">
