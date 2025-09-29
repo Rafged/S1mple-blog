@@ -4,22 +4,19 @@ import { Link, useParams } from 'react-router-dom';
 export default function Profile(){
   const { username } = useParams();
   const [profile, setProfile] = useState(null);
-  const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(()=>{
-    let canceled = false;
     setLoading(true);
-    setError(null);
     fetch(`/api/profiles/${username}`)
-      .then(async r => {
+      .then(r=>{
         if(!r.ok) throw new Error('Failed to load profile');
-        const data = await r.json();
-        if(!canceled) setProfile(data.profile);
+        return r.json();
       })
-      .catch(e => { if(!canceled) setError(e.message || 'Unknown error'); })
-      .finally(()=> { if(!canceled) setLoading(false); });
-    return ()=>{ canceled = true; }
+      .then(data=> setProfile(data.profile || data))
+      .catch(e=> setError(e.message))
+      .finally(()=> setLoading(false));
   },[username]);
 
   if(loading) return <div>Loading profile...</div>;
