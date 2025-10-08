@@ -1,0 +1,71 @@
+.profile-header {
+  background: #333333;
+  width: 1580px;
+  margin-left: -50%;
+  color: #fff;
+  text-align: center;
+  padding: 100px 20px;
+}
+
+.profile-avatar {
+  width: 120px;
+  height: 120px;
+  border-radius: 90%;
+  border: 1px solid white;
+  margin-bottom: 15px;
+}
+
+.profile-username {
+  font-size: 24px;
+  font-weight: bold;
+  margin: 5;
+}
+
+.profile-subinfo {
+  border-radius: 2px;
+  border: 1px solid #4CAF50;
+  width: 120px;
+  height: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 8px;
+  margin-left: 60%;
+}
+
+.profile-subinfo .heart {
+  color: #ff4d4f;
+  font-size: 15px;
+  margin-right: 30px;
+}
+
+.profile-subinfo .profile-text {
+  font-size: 16px;
+  margin-right: 20px;
+  color: green;
+}
+
+.article-carde {
+ border:1px solid #e0e0e0;
+  border-radius:6px;
+  padding:16px;
+  background:#fff;
+  margin-bottom:18px;
+  margin-left: 2%;
+  width: 96%;
+  box-shadow: 0 1px 0 rgba(0,0,0,0.02);
+}
+
+.heart-text {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: #28a745; /* зелёный фон */
+  color: white;        /* белый текст и иконка */
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-weight: bold;
+}
+.heart-text svg {
+  color: white; /* сердечко белым */
+}
