@@ -67,8 +67,8 @@ export default function App(){
             <Route path="/article/:slug" element={<Article/>}/>
             <Route path="/profile" element={<Profile/>}/>
             <Route path="/profile/:username" element={<Profile/>}/>
-            <Route path="/articles/:slug" element={<Article/>}/>
-            <Route path="/articles/:slug/edit" element={<EditArticle />} />
+            <Route path="articles/:slug" element={<Article/>}/>
+            
           </Routes>
         </div>
       </Content>

@@ -2,6 +2,15 @@ import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useCurrentUser } from "../hooks/useCurrentUser";
 
+/*
+  EditArticle page
+  - Loads article by slug
+  - Verifies current user is the author (otherwise redirects)
+  - Allows editing title, description, body and tags (comma separated)
+  - Sends PUT request to /api/articles/:slug with Authorization header (Token ...)
+  - On success navigates back to article page
+*/
+
 export default function EditArticle() {
   const { slug } = useParams();
   const navigate = useNavigate();
@@ -12,122 +21,176 @@ export default function EditArticle() {
     description: "",
     body: "",
     tagList: [],
+    author: null,
   });
   const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
   const [error, setError] = useState(null);
 
-  // Загружаем существующую статью
   useEffect(() => {
-    fetch(`https://realworld.habsida.net/api/articles/${slug}`)
-      .then((res) => res.json())
-      .then((data) => {
-        setArticle(data.article);
+    async function fetchArticle() {
+      try {
+        setLoading(true);
+        const res = await fetch("/api/articles/" + encodeURIComponent(slug));
+        if (!res.ok) {
+          throw new Error("Не удалось загрузить статью: " + res.status);
+        }
+        const data = await res.json();
+        const a = data.article;
+        setArticle({
+          title: a.title || "",
+          description: a.description || "",
+          body: a.body || "",
+          tagList: Array.isArray(a.tagList) ? a.tagList : [],
+          author: a.author || null,
+        });
+      } catch (err) {
+        console.error(err);
+        setError("Ошибка при загрузке статьи.");
+      } finally {
         setLoading(false);
-      })
-      .catch((err) => {
-        console.error("Ошибка при загрузке статьи:", err);
-        setError("Не удалось загрузить статью");
-        setLoading(false);
-      });
+      }
+    }
+    fetchArticle();
   }, [slug]);
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setArticle((prev) => ({ ...prev, [name]: value }));
+  useEffect(() => {
+    // If we know both currentUser and article author and not matching -> redirect away
+    if (!loading && article && article.author && currentUser) {
+      if (currentUser.username !== article.author.username) {
+        // not owner
+        navigate("/", { replace: true });
+      }
+    }
+  }, [loading, article, currentUser, navigate]);
+
+  const handleChange = (key) => (e) => {
+    const value = e.target.value;
+    if (key === "tagList") {
+      // user edits tags as comma separated string
+      setArticle((s) => ({ ...s, tagList: value }));
+    } else {
+      setArticle((s) => ({ ...s, [key]: value }));
+    }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!token) {
-      alert("Вы не авторизованы!");
-      return;
-    }
-
+    setError(null);
+    setSaving(true);
     try {
-      const resp = await fetch(`https://realworld.habsida.net/api/articles/${slug}`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Token ${token}`,
+      // Prepare payload
+      const payload = {
+        article: {
+          title: article.title,
+          description: article.description,
+          body: article.body,
+          tagList: Array.isArray(article.tagList)
+            ? article.tagList
+            : String(article.tagList || "")
+                .split(",")
+                .map((t) => t.trim())
+                .filter(Boolean),
         },
-        body: JSON.stringify({ article }),
+      };
+
+      const headers = {
+        "Content-Type": "application/json",
+      };
+      const savedToken = token || localStorage.getItem("token");
+      if (savedToken) headers["Authorization"] = "Token " + savedToken;
+
+      const res = await fetch("/api/articles/" + encodeURIComponent(slug), {
+        method: "PUT",
+        headers,
+        body: JSON.stringify(payload),
       });
-      if (resp.ok) {
-        const data = await resp.json();
-        navigate(`/articles/${data.article.slug}`);
-      } else {
-        const err = await resp.json();
-        console.error(err);
-        alert("Ошибка при сохранении статьи");
+
+      if (!res.ok) {
+        const txt = await res.text();
+        throw new Error("Ошибка при сохранении: " + res.status + " " + txt);
       }
+      const data = await res.json();
+      const newSlug = data.article.slug;
+      navigate("/article/" + newSlug);
     } catch (err) {
-      console.error("Ошибка сети:", err);
+      console.error(err);
+      setError("Не удалось сохранить статью. " + (err.message || ""));
+    } finally {
+      setSaving(false);
     }
   };
 
-  if (loading) return <div>Загрузка...</div>;
-  if (error) return <div>{error}</div>;
+  if (loading) return <div style={{ padding: 20 }}>Загрузка статьи...</div>;
+  if (error)
+    return (
+      <div style={{ padding: 20 }}>
+        <p style={{ color: "red" }}>{error}</p>
+      </div>
+    );
 
   return (
-    <div style={{ maxWidth: 800, margin: "40px auto", color: "#333" }}>
-      <h1 style={{ fontSize: "32px", marginBottom: 20 }}>Редактировать статью</h1>
+    <div style={{ padding: 20, maxWidth: 900 }}>
+      <h2>Редактирование статьи</h2>
       <form onSubmit={handleSubmit}>
-        <div style={{ marginBottom: 15 }}>
+        <div style={{ marginBottom: 12 }}>
           <label>Заголовок</label>
           <input
-            name="title"
             value={article.title}
-            onChange={handleChange}
-            style={{ width: "100%", padding: "10px", fontSize: "16px" }}
+            onChange={handleChange("title")}
+            required
+            style={{ width: "100%", padding: 10, fontSize: 16 }}
           />
         </div>
 
-        <div style={{ marginBottom: 15 }}>
-          <label>Описание</label>
+        <div style={{ marginBottom: 12 }}>
+          <label>Краткое описание</label>
           <input
-            name="description"
             value={article.description}
-            onChange={handleChange}
-            style={{ width: "100%", padding: "10px", fontSize: "16px" }}
+            onChange={handleChange("description")}
+            required
+            style={{ width: "100%", padding: 10 }}
           />
         </div>
 
-        <div style={{ marginBottom: 15 }}>
-          <label>Текст статьи</label>
+        <div style={{ marginBottom: 12 }}>
+          <label>Текст статьи (HTML/Markdown)</label>
           <textarea
-            name="body"
             value={article.body}
-            onChange={handleChange}
-            rows="10"
-            style={{ width: "100%", padding: "10px", fontSize: "16px" }}
+            onChange={handleChange("body")}
+            required
+            rows={12}
+            style={{ width: "100%", padding: 10, fontSize: 15 }}
           />
         </div>
 
-        <div style={{ marginBottom: 15 }}>
+        <div style={{ marginBottom: 12 }}>
           <label>Теги (через запятую)</label>
           <input
-            name="tagList"
-            value={article.tagList ? article.tagList.join(", ") : ""}
+            value={Array.isArray(article.tagList) ? article.tagList.join(", ") : article.tagList || ""}
             onChange={(e) =>
-              setArticle({ ...article, tagList: e.target.value.split(",").map((t) => t.trim()) })
+              setArticle((s) => ({ ...s, tagList: e.target.value }))
             }
-            style={{ width: "100%", padding: "10px", fontSize: "16px" }}
+            style={{ width: "100%", padding: 10 }}
           />
         </div>
 
-        <button
-          type="submit"
-          style={{
-            background: "#4CAF50",
-            color: "#fff",
-            padding: "10px 20px",
-            border: "none",
-            borderRadius: 6,
-            cursor: "pointer",
-          }}
-        >
-          Сохранить изменения
-        </button>
+        <div style={{ marginTop: 18 }}>
+          <button
+            type="submit"
+            disabled={saving}
+            style={{
+              background: "#4CAF50",
+              color: "#fff",
+              padding: "10px 20px",
+              border: "none",
+              borderRadius: 6,
+              cursor: "pointer",
+            }}
+          >
+            {saving ? "Сохранение..." : "Сохранить изменения"}
+          </button>
+        </div>
       </form>
     </div>
   );
